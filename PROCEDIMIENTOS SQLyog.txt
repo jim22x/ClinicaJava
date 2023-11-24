@@ -1,0 +1,16 @@
+PROCEDIMIENTOS:
+/*Listar usuarios*/
+CREATE PROCEDURE USPListarUsuarios()
+SELECT u.nombre_usuario, u.contrasena, t.tipo_descripcion
+FROM usuario u
+JOIN tipo_usuario t ON u.Id_tipo = t.Id_tipo;
+
+CALL USPListarUsuarios()
+
+/*Validar Usuario*/
+
+CREATE PROCEDURE USPValidarUsuario(IN nombre VARCHAR(50), IN con VARCHAR(255))
+SELECT*FROM usuario WHERE nombre_usuario = nombre AND contrasena = con;
+
+CALL USPValidarUsuario('Jim','123')
+

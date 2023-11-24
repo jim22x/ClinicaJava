@@ -1,0 +1,376 @@
+`m_grado`/* LISTAS TODOS LOS REGISTROS DE LA TABLA ALUMNO 
+SELECT <LISTA DE CAMPOS> FROM <NOMBRE DE LA TABLA>
+
+*/
+
+SELECT ID_ALUMNO, ALU_PATERNO,ALU_MATERNO,ALU_NOMBRES FROM ALUMNO
+SELECT ID_ALUMNO, ALU_PATERNO, ALU_MATERNO, ALU_CODIGO FROM ALUMNO
+SELECT * FROM ALUMNO
+
+/*ALIAS*/
+
+SELECT A.ID_ALUMNO,A.ALU_PATERNO,, A.ALU_MATERNO, A.ALU_NOMBRES
+FROM ALUMNO AS A;
+SELECT A.ID_ALUMNO,CONCAT(A.ALU_PATERNO,' ', A.ALU_MATERNO, A.ALU_NOMBRES) AS APellidosNombres, A.ALU_SEXO, A.ID_ESTADOCIVIL
+FROM ALUMNO A
+WHERE ALU_SEXO = 'M' OR ID_ESTADOCIVIL = 1
+
+
+SELECT A.ID_ALUMNO,CONCAT(A.ALU_PATERNO,' ', A.ALU_MATERNO, A.ALU_NOMBRES) AS APellidosNombres, A.ID_ESTADOCIVIL
+FROM ALUMNO A
+WHERE ID_ESTADOCIVIL = 1 OR ID_ESTADOCIVIL = 2
+
+/*Todos los importes maypres p ogiaes a 300 pero maenores o iguales a 450*/
+SELECT*FROM t_operacion
+WHERE vta_totalimporte BETWEEN 300 AND 450
+ORDER BY vta_totalimporte DESC
+
+/*Crear un SP*/
+`USPListarAlumno`
+
+/*Insertar registros*/
+/*insert into <tabla> values(valores a insertar)*/
+/*insert into <tabla>(campos) values(valores a insertar)*/
+
+INSERT INTO m_seccion VALUES('07','G')
+
+SELECT * FROM M_SECCION
+
+
+CALL USPListarAlumno
+
+/*CREAR REGISTROS A LA TABLA M_SECCION*/
+CREATE PROCEDURE USPInsertarSeccion(IN cod CHAR(2), IN des VARCHAR(5))
+INSERT INTO m_seccion VALUES(cod,des)
+
+CALL USPInsertarSeccion('08','H')
+
+SELECT * FROM M_SECCION
+
+/*INSERTAR REGISTROS A LA TABLA ALUMNO*/
+CREATE PROCEDURE USPInsertarAlumno
+(
+IN codAlu CHAR(6),
+IN aluPat VARCHAR(35),
+IN aluMat VARCHAR(35),
+IN aluNom VARCHAR(50),
+IN aluSexo CHAR(1),
+IN aluCodigo CHAR(14),
+IN codEstCiv VARCHAR(1),
+IN aluEmail VARCHAR(50)
+)
+INSERT INTO alumno VALUES(codAlu,aluPat,aluMat,aluNom,aluSexo,aluCodigo,codEstCiv,aluEmail)
+
+CALL USPInsertarAlumno('002043','DIAZ','ARENAS','Daniel Jesus','H','0010023232366','2','daniel.diaz@usil.pe')
+
+SELECT* FROM alumno ORDER BY id_alumno DESC
+SELECT*FROM m_estado_civil
+SELECT*FROM alumno ORDER BY alu_codigo ASC
+
+CREATE PROCEDURE USPListarEstadoCivil()
+SELECT*FROM M_ESTADO_CIVIL
+
+CALL USPListarEstadoCivil()
+
+/*Eliminar alumno
+
+DELETE FROM <NOMBRE DE LA TABLA> WHERE <COMPARACION>
+*/
+
+CREATE PROCEDURE USPEliminarAlumno(IN codAlu CHAR(6)) /*LISTAR MAT*/
+
+	DELETE FROM alumno WHERE id_alumno = codAlu
+	
+CALL USPEliminarAlumno('002043')
+
+
+
+
+/*Modificar registros
+
+UPDATE <NOMBRE DE LA TABLA> SET <CAMPO DE LA TABLA> = VALOR A REEMPLAZAR, <CAMPO DE LA TABLA> = VALOR A REEMPLAZAR  WHERE <CAMPO E LA TABLA> = VALOR
+*/
+
+CREATE PROCEDURE USPModificarAlumno
+(
+
+IN codAlu CHAR(6),
+IN aluPat VARCHAR(35),
+IN aluMat VARCHAR(35),
+IN aluNom VARCHAR(50),
+IN aluSexo CHAR(1),
+IN aluCodigo CHAR(14),
+IN codEstCiv VARCHAR(1),
+IN aluEmail VARCHAR(50)
+)
+
+UPDATE alumno
+SET alu_paterno = aluPat,
+	alu_materno = aluMat,
+	alu_nombres = aluNom,
+	alu_sexo = aluSexo,
+	alu_codigo = aluCodigo,
+	id_estadocivil = codEstCiv,
+	alu_email = aluEmail
+	
+WHERE id_alumno = codAlu
+
+CALL USPModificarAlumno('002041','a','b','c','d','e','f','g')
+
+
+/*BUSQUEDA*/
+SELECT*FROM alumno WHERE alu_paterno LIKE 'v%'
+CREATE PROCEDURE USPBuscarPorApellido (IN apePaterno VARCHAR(35))
+SELECT*FROM alumno WHERE alu_paterno LIKE CONCAT(apePaterno,'%')
+
+CALL USPBuscarPorApellido('D')
+
+/*LISTAR GRADOS*/
+CREATE PROCEDURE USPListarGrados()
+SELECT*FROM m_grado
+
+CALL USPListarGrados()
+
+/*LISTAR SECCIONES*/
+CREATE PROCEDURE USPListarSecciones()
+SELECT*FROM m_seccion
+
+CALL USPListarSecciones()
+
+/*LISTAR TURNOS*/
+CREATE PROCEDURE USPListarTurnos()
+SELECT*FROM m_turno
+
+CALL USPListarTurnos()
+
+/*LISTAR MATRICULAS*/
+CREATE PROCEDURE USPListarMatriculas(IN codAlu CHAR(6))
+SELECT*FROM m_matricula WHERE Id_alumno = codAlu
+
+CALL USPListarMatriculas()
+
+
+
+/*Listar Operaciones*/
+CREATE PROCEDURE USPListarR(IN codAlu CHAR(6))
+SELECT*FROM t_operacion WHERE Id_alumno = codAlu
+
+CALL USPListarR('000721')
+
+
+/*Listar Responsables*/
+
+CREATE PROCEDURE USPListarResp()
+SELECT DISTINCT vta_responsable FROM t_operacion 
+
+
+CALL USPListarResp()
+
+
+CREATE PROCEDURE USPListarOperaciones(IN codOpe CHAR(10))
+SELECT*FROM t_operacion WHERE Id_operacion = codOpe
+
+CALL USPListarR('000721')
+
+
+`m_grado`/* LISTAS TODOS LOS REGISTROS DE LA TABLA ALUMNO 
+SELECT <LISTA DE CAMPOS> FROM <NOMBRE DE LA TABLA>
+
+*/
+
+SELECT ID_ALUMNO, ALU_PATERNO,ALU_MATERNO,ALU_NOMBRES FROM ALUMNO
+SELECT ID_ALUMNO, ALU_PATERNO, ALU_MATERNO, ALU_CODIGO FROM ALUMNO
+SELECT * FROM ALUMNO
+
+/*ALIAS*/
+
+SELECT A.ID_ALUMNO,A.ALU_PATERNO,, A.ALU_MATERNO, A.ALU_NOMBRES
+FROM ALUMNO AS A;
+SELECT A.ID_ALUMNO,CONCAT(A.ALU_PATERNO,' ', A.ALU_MATERNO, A.ALU_NOMBRES) AS APellidosNombres, A.ALU_SEXO, A.ID_ESTADOCIVIL
+FROM ALUMNO A
+WHERE ALU_SEXO = 'M' OR ID_ESTADOCIVIL = 1
+
+
+SELECT A.ID_ALUMNO,CONCAT(A.ALU_PATERNO,' ', A.ALU_MATERNO, A.ALU_NOMBRES) AS APellidosNombres, A.ID_ESTADOCIVIL
+FROM ALUMNO A
+WHERE ID_ESTADOCIVIL = 1 OR ID_ESTADOCIVIL = 2
+
+/*Todos los importes maypres p ogiaes a 300 pero maenores o iguales a 450*/
+SELECT*FROM t_operacion
+WHERE vta_totalimporte BETWEEN 300 AND 450
+ORDER BY vta_totalimporte DESC
+
+/*Crear un SP*/
+`USPListarAlumno`
+
+/*Insertar registros*/
+/*insert into <tabla> values(valores a insertar)*/
+/*insert into <tabla>(campos) values(valores a insertar)*/
+
+INSERT INTO m_seccion VALUES('07','G')
+
+SELECT * FROM M_SECCION
+
+
+CALL USPListarAlumno
+
+/*CREAR REGISTROS A LA TABLA M_SECCION*/
+CREATE PROCEDURE USPInsertarSeccion(IN cod CHAR(2), IN des VARCHAR(5))
+INSERT INTO m_seccion VALUES(cod,des)
+
+CALL USPInsertarSeccion('08','H')
+
+SELECT * FROM M_SECCION
+
+/*INSERTAR REGISTROS A LA TABLA ALUMNO*/
+CREATE PROCEDURE USPInsertarAlumno
+(
+IN codAlu CHAR(6),
+IN aluPat VARCHAR(35),
+IN aluMat VARCHAR(35),
+IN aluNom VARCHAR(50),
+IN aluSexo CHAR(1),
+IN aluCodigo CHAR(14),
+IN codEstCiv VARCHAR(1),
+IN aluEmail VARCHAR(50)
+)
+INSERT INTO alumno VALUES(codAlu,aluPat,aluMat,aluNom,aluSexo,aluCodigo,codEstCiv,aluEmail)
+
+CALL USPInsertarAlumno('002043','DIAZ','ARENAS','Daniel Jesus','H','0010023232366','2','daniel.diaz@usil.pe')
+
+SELECT* FROM alumno ORDER BY id_alumno DESC
+SELECT*FROM m_estado_civil
+SELECT*FROM alumno ORDER BY alu_codigo ASC
+
+CREATE PROCEDURE USPListarEstadoCivil()
+SELECT*FROM M_ESTADO_CIVIL
+
+CALL USPListarEstadoCivil()
+
+/*Eliminar alumno
+
+DELETE FROM <NOMBRE DE LA TABLA> WHERE <COMPARACION>
+*/
+
+CREATE PROCEDURE USPEliminarAlumno(IN codAlu CHAR(6)) /*LISTAR MAT*/
+
+	DELETE FROM alumno WHERE id_alumno = codAlu
+	
+CALL USPEliminarAlumno('002043')
+
+
+
+
+/*Modificar registros
+
+UPDATE <NOMBRE DE LA TABLA> SET <CAMPO DE LA TABLA> = VALOR A REEMPLAZAR, <CAMPO DE LA TABLA> = VALOR A REEMPLAZAR  WHERE <CAMPO E LA TABLA> = VALOR
+*/
+
+CREATE PROCEDURE USPModificarAlumno
+(
+
+IN codAlu CHAR(6),
+IN aluPat VARCHAR(35),
+IN aluMat VARCHAR(35),
+IN aluNom VARCHAR(50),
+IN aluSexo CHAR(1),
+IN aluCodigo CHAR(14),
+IN codEstCiv VARCHAR(1),
+IN aluEmail VARCHAR(50)
+)
+
+UPDATE alumno
+SET alu_paterno = aluPat,
+	alu_materno = aluMat,
+	alu_nombres = aluNom,
+	alu_sexo = aluSexo,
+	alu_codigo = aluCodigo,
+	id_estadocivil = codEstCiv,
+	alu_email = aluEmail
+	
+WHERE id_alumno = codAlu
+
+CALL USPModificarAlumno('002041','a','b','c','d','e','f','g')
+
+
+/*BUSQUEDA*/
+SELECT*FROM alumno WHERE alu_paterno LIKE 'v%'
+CREATE PROCEDURE USPBuscarPorApellido (IN apePaterno VARCHAR(35))
+SELECT*FROM alumno WHERE alu_paterno LIKE CONCAT(apePaterno,'%')
+
+CALL USPBuscarPorApellido('D')
+
+/*LISTAR GRADOS*/
+CREATE PROCEDURE USPListarGrados()
+SELECT*FROM m_grado
+
+CALL USPListarGrados()
+
+/*LISTAR SECCIONES*/
+CREATE PROCEDURE USPListarSecciones()
+SELECT*FROM m_seccion
+
+CALL USPListarSecciones()
+
+/*LISTAR TURNOS*/
+CREATE PROCEDURE USPListarTurnos()
+SELECT*FROM m_turno
+
+CALL USPListarTurnos()
+
+/*LISTAR MATRICULAS*/
+CREATE PROCEDURE USPListarMatriculas(IN codAlu CHAR(6))
+SELECT*FROM m_matricula WHERE Id_alumno = codAlu
+
+CALL USPListarMatriculas()
+
+
+
+/*Listar Operaciones*/
+CREATE PROCEDURE USPListarR(IN codAlu CHAR(6))
+SELECT*FROM t_operacion WHERE Id_alumno = codAlu
+
+CALL USPListarR('000721')
+
+
+/*Listar Responsables*/
+
+CREATE PROCEDURE USPListarResponsables()
+SELECT DISTINCT Id_operacion,vta_responsable FROM t_operacion 
+
+
+CALL USPListarResponsables()
+
+
+CREATE PROCEDURE USPListarOperaciones(IN codOpe CHAR(10))
+SELECT*FROM t_detalle_operacion WHERE Id_operacion = codOpe
+
+CALL USPListarOperaciones('0000015858')
+
+
+CREATE PROCEDURE USPListarContadorDatos()
+
+SELECT COUNT(vta_responsable) FROM t_operacion WHERE  vta_responsable='jserrano';
+
+
+CREATE PROCEDURE USPListarOpe()
+SELECT DISTINCT  Id_operacion,Id_alumno,vta_responsable,vta_totalimporte FROM t_operacion 
+
+CALL USPListarOpe()
+
+CREATE PROCEDURE Maximo()
+SELECT MAX(vta_totalimporte) FROM t_operacion
+
+CALL Maximo()
+
+
+CREATE PROCEDURE Suma()
+SELECT SUM(vta_totalimporte) FROM t_operacion
+
+CALL Suma()
+
+
+CREATE PROCEDURE ListarDetalles(IN codOpe CHAR(10)
+SELECT*FROM t_detalle_operacion WHERE Id_operacion = codOpe
+
+CALL ListarDetalles()

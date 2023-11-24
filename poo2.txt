@@ -1,0 +1,104 @@
+/*PARA LOGIN*/
+
+CREATE PROCEDURE USPValidarUsuario(IN usu VARCHAR(30), IN contra VARCHAR(30))
+/*Se usa ? a cambio de usu y contra*/
+SELECT*FROM cuenta WHERE usuario = usu AND contraseña = contra;
+
+
+/*Listar Citas*/
+
+CREATE PROCEDURE USPListarCitas()
+SELECT*FROM cita
+
+/*Llamar*/
+CALL USPListarCitas()
+
+
+/*Listar Pacientes*/
+
+CREATE PROCEDURE USPListarPacientes()
+SELECT*FROM paciente
+
+/*Llamar*/
+CALL USPListarPacientes()
+
+
+/*Listar Pacientes*/
+
+CREATE PROCEDURE USPListarDoctores()
+SELECT*FROM doctor
+
+/*Llamar*/
+CALL USPListarDoctores()
+
+CAMBIAR EN EL REPOSITORY
+
+SIN PARAMETROS Y CON PARAMETRO
+@Override
+    public List<Cuenta> getAllCuentas() {
+        
+        try
+        {
+            /*Crear arreglo dinamico*/
+            List<Cuenta> lstCuenta = new ArrayList<>();
+            
+            /*Llamar al Store Procedure*/
+            
+            CallableStatement ceCuenta = Conexion.ObtenerConexion().prepareCall("{CALL USPListarCuentas}");
+            ResultSet rsCuenta = ceCuenta.executeQuery();
+            while(rsCuenta.next())
+            {
+                Cuenta objCuenta = new Cuenta();
+                objCuenta.setId_admi(rsCuenta.getInt("id_admi"));
+                objCuenta.setUsuario(rsCuenta.getString("usuario"));
+                objCuenta.setContraseña(rsCuenta.getString("contraseña"));
+                
+                lstCuenta.add(objCuenta);
+                
+                
+            }
+            return lstCuenta;
+        }
+        catch(Exception e)
+        {
+            e.getMessage();
+        }
+        return null;
+                
+    }
+
+    @Override
+    public void Validar(JTextField usu, JPasswordField contra) 
+    {
+        try{
+            
+            PreparedStatement ceCuenta = Conexion.ObtenerConexion().prepareStatement("{CALL USPValidarUsuario(?,?)}");
+            
+            ceCuenta.setString(1, usu.getText());
+            
+            String con = String.valueOf(contra.getPassword());
+            
+            ceCuenta.setString(2, con );
+            
+            ResultSet rsCuenta = ceCuenta.executeQuery();
+            
+            if(rsCuenta.next())
+            {
+                JOptionPane.showMessageDialog(null,"BIENVENID@");
+                menuPrincipal men = new menuPrincipal();
+                
+                men.setVisible(true);
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null,"USUARIO O CONTRASEÑA INVALIDA");
+            }
+            
+            
+        }
+        catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(null,"ERROR" + e.toString());
+        }
+        
+    }
